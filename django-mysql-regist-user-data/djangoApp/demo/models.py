@@ -2,7 +2,7 @@ from django.db import models
 
 
 class UserData(models.Model):
-    """ user_dataテーブルへアクセするためのモデル """
+    """ user_dataテーブルへアクセスするためのモデル """
 
     # テーブル名を存在するuser_dataテーブルに変更する
     class Meta:
