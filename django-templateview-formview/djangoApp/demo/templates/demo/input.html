@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>入力画面</title>
+    <!-- 独自CSSファイルの読み込み -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'demo/css/demo.css' %}">
+</head>
+<body>
+    <p>下記必要事項を記載の上、「確認」ボタンを押下してください。</p><br/>
+    <!-- action属性のURLで、(demoフォルダ内)urls.pyの画面遷移先のname属性の値を指定している -->
+    <form action="{% url 'confirm' %}" method="post">
+        <!-- 下記csrf_tokenは、CSRF対策を行うことでform送信時エラーを防ぐために設定 -->
+        {% csrf_token %}
+        <table>
+            <!-- 氏名 -->
+            <tr>
+                <td align="left" valign="top">{{ input_form.name.label_tag }}</td>
+                <td>{{ input_form.name }}</td>
+            </tr>
+            <!-- 生年月日 -->
+            <tr>
+                <td align="left" valign="top">{{ input_form.birth_day.label_tag }}</td>
+                <td>
+                    {{ input_form.birth_year }}年
+                    {{ input_form.birth_month }}月
+                    {{ input_form.birth_day }}日
+                    <!-- 生年月日の入力チェックエラーを表示 -->
+                    <span class="error_message">{{ input_form.non_field_errors.0 }}</span>
+                </td>
+            </tr>
+            <!-- 性別 -->
+            <tr>
+                <td align="left" valign="top">{{ input_form.sex.label_tag }}</td>
+                <td>
+                    {% for sex_choice in input_form.sex %}
+                        {{ sex_choice.choice_label }}
+                        {{ sex_choice.tag }}
+                    {% endfor %}
+                </td>
+            </tr>
+            <!-- メモ -->
+            <tr>
+                <td align="left" valign="top">{{ input_form.memo.label_tag }}</td>
+                <td>{{ input_form.memo }}</td>
+            </tr>
+            <!-- 入力確認 -->
+            <tr>
+                <td align="left" valign="top">{{ input_form.check.label_tag }}</td>
+                <td>{{ input_form.check }}</td>
+            </tr>
+        </table>
+        <br/><br/>
+        <input type="submit" name="confirm" value="確認" />
+    </form>
+</body>
+</html>
