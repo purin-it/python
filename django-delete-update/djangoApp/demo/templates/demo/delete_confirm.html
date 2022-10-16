@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>削除確認画面</title>
+</head>
+<body>
+    <p>下記データを削除する場合は、「削除」ボタンを押下してください。</p><br/>
+    <form method="post">
+        <!-- 下記csrf_tokenは、CSRF対策を行うことでform送信時エラーを防ぐために設定 -->
+        {% csrf_token %}
+        <table>
+            <!-- 名前 -->
+            <tr>
+                <td align="left" valign="top">名前: </td>
+                <td>{{ object.name }}</td>
+            </tr>
+            <!-- 生年月日 -->
+            <tr>
+                <td align="left" valign="top">生年月日: </td>
+                <td>{{ object.birth_year }}年
+                    {{ object.birth_month }}月
+                    {{ object.birth_day }}日</td>
+            </tr>
+            <!-- 性別 -->
+            <tr>
+                <td align="left" valign="top">性別: </td>
+                <td>
+                    {% if object.sex|stringformat:"s" == "1" %}
+                         男
+                    {% elif object.sex|stringformat:"s" == "2" %}
+                         女
+                    {% endif %}
+                </td>
+            </tr>
+            <!-- メモ -->
+            <tr>
+                <td align="left" valign="top">メモ: </td>
+                <!-- 「| default:""」で、Noneを空文字に置き換える -->
+                <!-- テキストエリアの改行を有効にするため、「| linebreaksbr」を付与 -->
+                <td>{{ object.memo | default:"" | linebreaksbr }}</td>
+            </tr>
+        </table>
+        <br/><br/>
+        <input type="submit" value="削除" />
+        <input type="button" name="back" value="戻る" onclick="location.href={% url 'index' %}" />
+    </form>
+</body>
+</html>

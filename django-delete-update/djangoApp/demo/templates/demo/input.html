@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>入力画面</title>
+    <!-- 独自CSSファイルの読み込み -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'demo/css/demo.css' %}">
+</head>
+<body>
+    <p>下記必要事項を記載の上、「確認」ボタンを押下してください。</p><br/>
+    <!-- action属性のURLで、(demoフォルダ内)urls.pyの画面遷移先のname属性の値を指定している -->
+    <form action="{% url 'confirm' %}" method="post">
+        <!-- 下記csrf_tokenは、CSRF対策を行うことでform送信時エラーを防ぐために設定 -->
+        {% csrf_token %}
+        <table>
+            <!-- 名前 -->
+            <tr>
+                <td align="left" valign="top">{{ form.name.label_tag }}</td>
+                <td>{{ form.name }}</td>
+            </tr>
+            <!-- 生年月日 -->
+            <tr>
+                <td align="left" valign="top">{{ form.birth_day.label_tag }}</td>
+                <td>
+                    {{ form.birth_year }}年
+                    {{ form.birth_month }}月
+                    {{ form.birth_day }}日
+                    <!-- 生年月日の入力チェックエラーを表示 -->
+                    <span class="error_message">{{ form.non_field_errors.0 }}</span>
+                </td>
+            </tr>
+            <!-- 性別 -->
+            <tr>
+                <td align="left" valign="top">{{ form.sex.label_tag }}</td>
+                <td>
+                    {% for sex_choice in form.sex %}
+                        {{ sex_choice.choice_label }}
+                        {{ sex_choice.tag }}
+                    {% endfor %}
+                </td>
+            </tr>
+            <!-- メモ -->
+            <tr>
+                <td align="left" valign="top">{{ form.memo.label_tag }}</td>
+                <td>{{ form.memo }}</td>
+            </tr>
+            <!-- 入力確認 -->
+            <tr>
+                <td align="left" valign="top">{{ form.check.label_tag }}</td>
+                <td>{{ form.check }}</td>
+            </tr>
+            <!-- ユーザーID -->
+            <!-- 一覧画面で更新リンクを押下したため、object.idが設定されている場合 -->
+            {% if object.id %}
+                <input type="hidden" name="user_id" value="{{ object.id }}" />
+            <!-- 入力画面で入力チェックエラーが発生したり、確認画面で戻るボタンを
+                 押下したため、user_idが設定されている場合 -->
+            {% elif user_id %}
+                <input type="hidden" name="user_id" value="{{ user_id }}" />
+            <!-- 一覧画面でデータ追加ボタンを押下したため、object.idもuser_idも
+                 設定されていない場合 -->
+            {% else %}
+                <input type="hidden" name="user_id" value="" />
+            {% endif %}
+        </table>
+        <br/><br/>
+        <input type="submit" name="confirm" value="確認" />
+        <input type="button" name="back" value="戻る" onclick="location.href={% url 'index' %}" />
+    </form>
+</body>
+</html>
