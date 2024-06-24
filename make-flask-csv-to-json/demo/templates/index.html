@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <script src="../static/demo.js"></script>
+    <title>CSVファイル取込</title>
+</head>
+<body>
+    取り込んだCSVファイルのデータを、JSON形式で出力します。
+    <br/><br/>
+    <form enctype="multipart/form-data">
+        <input type="file" id="csv_file" name="csv_file" />　
+        <input type="button" value="CSV取込" onclick="import_csv()" />
+        <br/><br/>
+        <textarea rows="35" cols="50"
+           placeholder="ここにJSON形式のCSVデータが表示されます">{{ json_txt }}</textarea>
+    </form>
+</body>
+</html>
