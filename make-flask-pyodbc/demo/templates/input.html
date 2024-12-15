@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/demo.css" type="text/css">
+    <title>入力画面</title>
+</head>
+<body>
+    下記必要事項を記載の上、「確認」ボタンを押下してください。
+    <br/><br/>
+    <!-- エラーメッセージを表示 -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li class="errorMessage">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <form action="/confirm" method="post">
+        <table>
+            <!-- 名前 -->
+            <tr>
+                <td align="left" valign="top">名前：</td>
+                <td>
+                    <input type="text" id="name" name="name"
+                           {% if form_data %} value="{{ form_data.name }}" {% endif %}  />
+                </td>
+            </tr>
+            <!-- 生年月日 -->
+            <tr>
+                <td align="left" valign="top">生年月日：</td>
+                <td>
+                    <input type="text" id="birthYear" name="birthYear" size="4" maxlength="4"
+                           {% if form_data %} value="{{ form_data.birthYear }}" {% endif %} />年
+                    <select name="birthMonth" id="birthMonth">
+                        <option value=""></option>
+                        {% for month in range(1, 12+1) %}
+                            <option value="{{ month }}"
+                                    {% if form_data and form_data.birthMonth　==　month|string %} selected {% endif %}>
+                                {{ month }}
+                            </option>
+                        {% endfor %}
+                    </select>月
+                    <select name="birthDay" id="birthDay">
+                        <option value=""></option>
+                        {% for day in range(1, 31+1) %}
+                            <option value="{{ day }}"
+                                    {% if form_data and form_data.birthDay == day|string %} selected {% endif %}>
+                                {{ day }}
+                            </option>
+                        {% endfor %}
+                    </select>日
+                </td>
+            </tr>
+            <!-- 性別 -->
+            <tr>
+                <td align="left" valign="top">性別：</td>
+                <td>
+                    <input type="radio" id="sex_1" name="sex" value="1"
+                           {% if form_data and form_data.sex=='1' %} checked {% endif %} />
+                    <label for="sex_1">男</label>　
+                    <input type="radio" id="sex_2" name="sex" value="2"
+                           {% if form_data and form_data.sex=='2' %} checked {% endif %} />
+                    <label for="sex_2">女</label>
+                </td>
+            </tr>
+            <!-- メモ -->
+            <tr>
+                <td align="left" valign="top">メモ：</td>
+                <td>
+                    <textarea rows="6" cols="40" id="memo" name="memo">{% if form_data %}{{ form_data.memo }}{% endif %}</textarea>
+                </td>
+            </tr>
+            <!-- 入力確認 -->
+            <tr>
+                <td align="left" valign="top">入力確認：</td>
+                <td>
+                    <input type="checkbox" id="checked" name="checked"
+                           {% if form_data and form_data.checked=='on' %} checked {% endif %} />
+                    <label for="checked">確認済</label>
+                </td>
+            </tr>
+        </table>
+        <br/><br/>
+        <input type="submit" value="確認" />
+    </form>
+</body>
+</html>
